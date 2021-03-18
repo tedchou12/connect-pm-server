@@ -102,10 +102,22 @@ class tenant :
         else :
             return False
 
-
-    def delete_account(self, email='') :
+    def tenant_id2domain(self, id='') :
         obj_database = db()
-        query = ('DELETE FROM ' + self.table + ' WHERE account_email=%s')
-        data = (email, )
+
+        query = ('SELECT * FROM ' + self.table + ' WHERE tenant_id=%s')
+        data = (id, )
+
+        tenants = obj_database.select(query, data)
+
+        if len(tenants) > 0 :
+            return tenants[0]['tenant_domain']
+        else :
+            return False
+
+    def delete_tenant(self, id='') :
+        obj_database = db()
+        query = ('DELETE FROM ' + self.table + ' WHERE tenant_id=%s')
+        data = (id, )
 
         return obj_database.delete(query, data)

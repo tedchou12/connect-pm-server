@@ -1,7 +1,7 @@
 <html>
   {% include "header_login.html" %}
   <div class="wrapper">
-    <section class="container">
+    <section class="login-container">
       <div class="form-login">
         <div class="mt-30 mb-30 form-login__company-logo-wrapper">
           <img src="{{ context.resources_path }}images/logo_default.png" class="img-responsive form-login__company-logo ">
@@ -9,40 +9,10 @@
         <div class="form-login__body">
           <div class="form-group">
             <p class="flash-messages flash-messages--error mb-20" style="display: {{ context.msg_status }}">{{ context.msg_content }}</p>
-            <form method="post" action="" id="login_form">
-              <input type="hidden" name="hash" value="{{ context.val_hash }}" />
-              <div class="form-group">
-                <label for="login_user" class="login_caption">{{ context.lang_username }}</label>
-                <input name="email" class="form-control" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="username" value="{{ context.val_username }}" autofocus>
-              </div>
-              <div class="form-group">
-                <label for="login_pwd" class="login_caption">{{ context.lang_password }}</label>
-                <input type="password" name="pass" class="form-control" autocomplete="current-password">
-              </div>
-              <div class="form-group">
-                <div class="checkbox">
-                  <label for="remember_login">
-                    <input type="checkbox" id="remember_login" name="remember_login" value="1" /> {{ context.lang_remember_me }}
-                  </label>
-                  <label class="forgot_login">
-                    <a href="{{ context.link_forgot }}">{{ context.lang_forot_my_pass }}</a>
-                  </label>
-                </div>
-              </div>
-              <input type="submit" class="btn btn-primary btn-block" name="submit" value="{{ context.lang_login }}">
-              <div class="separator">{{ context.lang_or }}</div>
-              <div>
-                <a href="{{ context.link_hac }}">
-                  <button button-role="submit" type="button" class="btn btn-primary btn-block">Sign In with HAC</button>
-                </a>
-                <a href="{{ context.link_google }}">
-                  <button button-role="submit" type="button" class="up-btn mr-0 gsso-button full-width mb-0 up-btn-primary">Sign In with Google</button>
-                </a>
-                <a href="{{ context.link_microsoft }}">
-                  <button button-role="submit" type="button" class="up-btn mr-0 gsso-button full-width mb-0 up-btn-primary">Sign In with Microsoft</button>
-                </a>
-              </div>
-            </form>
+            <div>
+              <div class="clear_span"></div>
+              <button type="submit" class="btn btn-primary btn-block" name="submit" onclick="window.location='{{ context.link_hac }}'">{{ context.lang_login }}</button>
+            </div>
           </div>
         </div>
       </div>

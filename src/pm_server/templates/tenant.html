@@ -1,16 +1,32 @@
 <html>
   {% include "header.html" %}
+  <div class="bar_title">
+    {% autoescape false %}
+      {{ context.lang_title }}
+    {% endautoescape %}
+  </div>
   <div class="wrapper">
-    <section class="container">
+    <section class="form_container form">
       <form method="post" action="">
-        <b>{{ context.lang_tenant }}</b>
-        <select name="tenant">
-          <option>{{ context.lang_select }}</option>
-          {% for data in context.val_tenants %}
-            <option value="{{ data.contact_tenant }}">{{ data.contact_tenant }}</option>
-          {% endfor %}
-        </select>
-        <input type="submit" name="submit" value="{{ context.lang_select }}" />
+        <div class="row form-row">
+          <div class="col-3 label_cell">
+            <label for="tenant">{{ context.lang_tenant }}</label>
+          </div>
+          <div class="col-9 field_cell">
+            <select id="tenant" name="tenant" class="form-control">
+              <option>{{ context.lang_select }}</option>
+              {% for data in context.val_tenants %}
+                <option value="{{ data.val }}">{{ data['text'] }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="row form-row">
+          <div class="col-3"></div>
+          <div class="col-9 field_cell">
+            <input type="submit" name="submit" value="{{ context.lang_select }}" class="btn btn-light" />
+          </div>
+        </div>
       </form>
     </section>
   </div>

@@ -1,18 +1,19 @@
 <html>
   {% include "header_login.html" %}
   <div class="wrapper">
-    <section class="container">
+    <section class="login-container">
       <div class="form-login">
         <div class="mt-30 mb-30 form-login__company-logo-wrapper">
-          <img src="{{ context.resources_path }}images/logo_default.png" class="img-responsive form-login__company-logo ">
+          <img src="{{ context.resources_path }}images/logo_default1.png" class="img-responsive form-login__company-logo ">
         </div>
         <div class="form-login__body">
           <div class="form-group">
+            <p class="flash-messages flash-messages--error mb-20" style="display: {{ context.msg_status }}">{{ context.msg_content }}</p>
             <form method="post" action="" id="login_form">
               <input type="hidden" name="hash" value="" />
               <div class="form-group">
                 <label for="email" class="login_caption">{{ context.lang_email }}</label>
-                <input name="email" class="form-control" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="username" value="" autofocus>
+                <input name="email" id="email" class="form-control" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="username" value="" autofocus>
               </div>
               <input type="submit" class="btn btn-primary btn-block" name="submit" value="{{ context.lang_reset_pass }}">
               <input type="button" class="btn btn-default btn-block" onclick="window.location='{{ context.link_login }}'" value="{{ context.lang_login }}">
@@ -23,4 +24,15 @@
     </section>
   </div>
   <!-- {% include "footer.html" %} -->
+  <script type="text/javascript" src="{{ context.resources_path }}js/jquery.min.js"></script>
+  <script type="text/javascript" src="{{ context.resources_path }}js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{ context.resources_path }}js/bootstrap.bundle.min.js"></script>
+  <script>
+    jQuery("#login_form").submit(function(event) {
+      if(!jQuery('#email').val().match(/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/)){
+        event.preventDefault();
+        alert('{{ context.lang_not_email }}');
+      }
+    });
+  </script>
 </html>

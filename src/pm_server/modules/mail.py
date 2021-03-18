@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 import smtplib
+import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from .config import config
@@ -25,8 +26,15 @@ class mail :
 
         html_body = MIMEText(body, 'html')
         msg.attach(html_body)
-        server = smtplib.SMTP_SSL(self.smtp_host, self.smtp_port)
+        # server = smtplib.SMTP_SSL(self.smtp_host, self.smtp_port)
+        server = smtplib.SMTP(self.smtp_host, self.smtp_port)
+
         server.ehlo()
+        # ssl_connection
+        context = ssl.create_default_context()
+        server.starttls(context=context)
+        server.ehlo()
+
         server.login(self.smtp_user, self.smtp_pass)
         server.sendmail(fromaddr, toaddrs, msg.as_string())
         server.close()

@@ -1,7 +1,9 @@
 from flask import session, render_template, request
+import re
 from .mail import mail
 from .lang.ja import ja
 from .lang.en import en
+from .lang.zh import zh
 from .config import config
 
 def display_datetime(datetime='') :
@@ -39,13 +41,17 @@ def sendmail(recipient='', subject='', body='') :
 def lang(string='') :
     if 'lang' not in session :
         session['lang'] = 'en'
-        supported_languages = ['en', 'ja']
+        supported_languages = ['en', 'ja', 'zh']
         session['lang'] = request.accept_languages.best_match(supported_languages)
 
     if session['lang'] == 'en' :
         obj_en = en()
         if string in obj_en.translations :
             return obj_en.translations[string]
+    elif session['lang'] == 'zh' :
+        obj_ja = zh()
+        if string in obj_ja.translations :
+            return obj_ja.translations[string]
     else :
         obj_ja = ja()
         if string in obj_ja.translations :
@@ -59,3 +65,11 @@ def display_number(number='') :
     else :
         number = 0
     return '{0:,}'.format(int(number))
+
+def check_password_strength(string='') :
+    result = re.search('.{8,}', string)
+
+    if result :
+        return True
+    else :
+        return False

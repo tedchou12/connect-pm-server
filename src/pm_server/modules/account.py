@@ -40,7 +40,7 @@ class account :
 
         return obj_database.insert(query, data)
 
-    def update_account(self, user_id='', account_lang='', account_info={}) :
+    def update_account(self, user_id='', account_lang='', account_info={}, password='') :
         obj_database = db()
 
         query = ('SELECT * FROM ' + self.table + ' WHERE account_id=%s')
@@ -55,11 +55,20 @@ class account :
             account_data['lang'] = 'en'
         elif account_lang == 'ja' :
             account_data['lang'] = 'ja'
+        elif account_lang == 'zh' :
+            account_data['lang'] = 'zh'
         if bool(account_info) != False :
             for item in account_info :
                 account_data[item] = account_info[item]
-        query = ('UPDATE ' + self.table + ' SET account_data=%s WHERE account_id=%s')
-        data = (json.dumps(account_data), user_id)
+        if password != '' :
+            salt = self.salt_generator()
+            new_pass = self.pass_hash(password, salt)
+            query = ('UPDATE ' + self.table + ' SET account_data=%s, account_pass=%s, account_salt=%s, account_reset=%s, account_reset_datetime=%s WHERE account_id=%s')
+            data = (json.dumps(account_data), new_pass, salt, '', None, user_id)
+        else :
+            query = ('UPDATE ' + self.table + ' SET account_data=%s WHERE account_id=%s')
+            data = (json.dumps(account_data), user_id)
+
         if obj_database.update(query, data) == True :
             return True
         else :
@@ -184,7 +193,7 @@ class account :
 
     def password_reset(self, user_id) :
         obj_database = db()
-        hash = self.salt_generator()
+        hash = self.hash_generator()
         query = ('UPDATE ' + self.table + ' SET account_reset=%s, account_reset_datetime=%s WHERE account_id=%s')
         data = (hash, time.strftime('%Y-%m-%d %H:%M:%S'), user_id)
         if obj_database.update(query, data) == True :
@@ -227,3 +236,7 @@ class account :
     def salt_generator(self) :
         letters = string.ascii_lowercase + '1234567890'
         return ''.join(random.choice(letters) for i in range(8))
+
+    def hash_generator(self) :
+        letters = string.ascii_lowercase + '1234567890'
+        return ''.join(random.choice(letters) for i in range(32))

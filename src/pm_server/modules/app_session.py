@@ -22,10 +22,13 @@ class app_session :
         else :
             return False
 
-    def check_session(self, token='') :
+    def check_session(self, session_id='') :
         obj_database = db()
         query = ('SELECT * FROM ' + self.table + ' WHERE session_hash=%s AND session_logout!=%s')
-        session_hash = token
+        if session_id == '' :
+            session_hash = request.cookies.get('session_id', None)
+        else :
+            session_hash = session_id
         data = (session_hash, 1, )
         sessions = obj_database.select(query, data)
 

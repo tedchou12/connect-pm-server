@@ -30,10 +30,16 @@ class ja :
                              'Select Tenant': 'テナント',
                              'Confirm Password': 'パスワード確認',
                              'Remember this login': 'ログイン状態を維持する',
+                             'Passwords do not match': '入力したパスワードは一致しませんでした',
                              'You did not pass the security check, please login again': 'ログインセキュリティーの不正です、も一度試してください。',
                              'Incorrect Email or Password combination': 'ユーザー名かパスワードが不正です',
+                             'Password strength too weak': 'もっと強いパスワードを使ってください',
+                             'Password reset successful': 'パスワードを更新しました',
                              'Incorrect Account from Microsoft': 'Microsoft のアカウントは不正です',
                              'Incorrect Account from Google': 'Google のアカウントは不正です',
                              'Reset Password': 'パスワードをリセット',
+                             'Please check your email': 'メールを確認してください',
+                             'Please input an Email': 'Eメールアドレスを入力してください', 
                              'Return to Login': 'ログインへ戻る',
-                             'Forgot my Password?': 'パスワードをリセット'}
+                             'Forgot my Password?': 'パスワードをリセット',
+                             'OR': 'または',}

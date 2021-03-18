@@ -1,25 +1,71 @@
 <html>
   {% include "header.html" %}
+  <div class="bar_title">
+    {% autoescape false %}
+      {{ context.lang_title }}
+    {% endautoescape %}
+  </div>
   <div class="wrapper">
-    <section class="container">
-      <form method="post" action="">
-        <b>{{ context.lang_lang }}</b>
-        <select name="lang">
-          <option>{{ context.lang_select }}</option>
-          {% if context.val_lang == 'ja' %}
-            <option value="ja" selected>{{ context.lang_ja }}</option>
-          {% else %}
-            <option value="ja">{{ context.lang_ja }}</option>
-          {% endif %}
-          {% if context.val_lang == 'en' %}
-            <option value="en" selected>{{ context.lang_en }}</option>
-          {% else %}
-            <option value="en">{{ context.lang_en }}</option>
-          {% endif %}
-        </select>
-        <input type="submit" name="submit" value="{{ context.lang_save }}" />
+    <section class="form_container form">
+      <p class="alert alert-warning" style="display: {{ context.msg_status }}">{{ context.msg_content }}</p>
+      <form id="account_update" method="post" action="">
+        <div class="row form-row">
+          <div class="col-3 label_cell">
+            <label for="lang">{{ context.lang_lang }}</label>
+          </div>
+          <div class="col-9 field_cell">
+            <select id="lang" name="lang" class="form-control">
+              <option>{{ context.lang_select }}</option>
+              {% if context.val_lang == 'ja' %}
+                <option value="ja" selected>{{ context.lang_ja }}</option>
+              {% else %}
+                <option value="ja">{{ context.lang_ja }}</option>
+              {% endif %}
+              {% if context.val_lang == 'en' %}
+                <option value="en" selected>{{ context.lang_en }}</option>
+              {% else %}
+                <option value="en">{{ context.lang_en }}</option>
+              {% endif %}
+              {% if context.val_lang == 'zh' %}
+                <option value="zh" selected>{{ context.lang_zh }}</option>
+              {% else %}
+                <option value="zh">{{ context.lang_zh }}</option>
+              {% endif %}
+            </select>
+          </div>
+        </div>
+        <div class="row form-row">
+          <div class="col-3 label_cell">
+            <label for="lang">{{ context.lang_password }}</label>
+          </div>
+          <div class="col-9 field_cell">
+            <input type="password" id="password" name="password" class="form-control" />
+          </div>
+        </div>
+        <div class="row form-row">
+          <div class="col-3 label_cell">
+            <label for="lang">{{ context.lang_password_confirm }}</label>
+          </div>
+          <div class="col-9 field_cell">
+            <input type="password" id="password_confirm" name="password_confirm" class="form-control" />
+          </div>
+        </div>
+        <div class="row form-row">
+          <div class="col-3 label_cell"></div>
+          <div class="col-9 field_cell">
+            <input type="submit" name="submit" value="{{ context.lang_save }}" class="btn btn-light" />
+          </div>
+        </div>
       </form>
     </section>
   </div>
   {% include "footer.html" %}
+  <script>
+  jQuery("#account_update").submit(function(event) {
+    if (jQuery('#password').val() != jQuery('#password_confirm').val()) {
+      event.preventDefault();
+      alert('{{ context.lang_password_not_match }}');
+    }
+  });
+  </script>
 </html>

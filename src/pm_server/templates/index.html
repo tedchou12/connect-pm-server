@@ -1,5 +1,10 @@
 <html>
   {% include "header.html" %}
+  <div class="bar_title">
+    {% autoescape false %}
+      {{ context.lang_title }}
+    {% endautoescape %}
+  </div>
   <div class="wrapper">
     <section class="container">
       <div class="row">
@@ -11,95 +16,21 @@
             <p>{{ context.lang_total }}: {{ context.val_total }}</p>
           {% endif %}
         </div>
-        <div class="col-md-4 col-12 div-custom">
+        <div class="col-md-12 col-12 div-custom">
           <table class="table table-striped table-bordered table-custom">
             <thead>
               <tr>
-                <th scope="col">{{ context.lang_service }}</th>
-                <th scope="col">{{ context.lang_licenses }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">{{ context.lang_hac }}</th>
-                <td>{{ context.val_hac }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ context.lang_hsb }}</th>
-                <td>{{ context.val_hsb }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ context.lang_hdc }}</th>
-                <td>{{ context.val_hdc }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ context.lang_dlp }}</th>
-                <td>{{ context.val_dlp }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ context.lang_arc }}</th>
-                <td>{{ context.val_arc }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ context.lang_hos }}</th>
-                <td>{{ context.val_hos }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table table-striped table-bordered table-custom">
-            <thead>
-              <tr>
-                <th scope="col">{{ context.lang_domain }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for domain in context.val_domains %}
-                <tr>
-                  <th scope="row">
-                    {{ domain.value }}
-                    {% if domain.label != '' %}
-                      <span class="badge badge-primary">{{ domain.label }}</span>
-                    {% endif %}
-                  </th>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          <!-- <button class="btn btn-primary btn-edit btn-sm">{{ context.lang_edit }}</button> -->
-        </div>
-        <div class="col-md-8 col-12 div-custom">
-          <table class="table table-striped table-bordered table-custom">
-            <thead>
-              <tr>
-                <th scope="col">{{ context.lang_name }}</th>
-                <th scope="col">{{ context.lang_email }}</th>
-                <th scope="col">{{ context.lang_phone }}</th>
-                <th scope="col">{{ context.lang_normal }}</th>
-                <th scope="col">{{ context.lang_renewal }}</th>
-                <th scope="col">{{ context.lang_emergency }}</th>
+                <th scope="col">{{ context.lang_url }}</th>
+                <th scope="col">{{ context.lang_username }}</th>
+                <th scope="col">{{ context.lang_password }}</th>
               </tr>
             </thead>
             <tbody>
               {% for data in context.val_accounts %}
                 <tr>
-                  <th scope="row">{{ data.account_name }}</th>
-                  <td>{{ data.account_email }}</td>
-                  <td>{{ data.account_phone }}</td>
-                  {% if data.contact == True %}
-                    <td>True</td>
-                  {% else %}
-                    <td>False</td>
-                  {% endif %}
-                  {% if data.renew == True %}
-                    <td>True</td>
-                  {% else %}
-                    <td>False</td>
-                  {% endif %}
-                  {% if data.emergency == True %}
-                    <td>True</td>
-                  {% else %}
-                    <td>False</td>
-                  {% endif %}
+                  <th scope="row">{{ data.url }}</th>
+                  <td>{{ data.username }}</td>
+                  <td>********</td>
                 </tr>
               {% endfor %}
             </tbody>

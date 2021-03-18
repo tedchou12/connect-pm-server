@@ -20,9 +20,9 @@ app.secret_key = obj_config.params['flask_secret']
 def header_template() :
     context_header = {'lang_home': lang('Home'),
                       'lang_setting': lang('Setting'),
-                      'link_home': link(''),
-                      'link_setting': link('setting'),
-                      'link_logout': link('logout'),
+                      'link_home': link('/'),
+                      'link_setting': link('/setting'),
+                      'link_logout': link('/logout'),
                       'lang_logout': lang('Logout')}
 
     return context_header
@@ -37,11 +37,11 @@ def index() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
     else :
-        return redirect(link('login'))
+        return redirect(link('/login'))
 
     # selecting which tenant to view
     if 'tenant' not in session or session['tenant'] is None or session['tenant'] == '' :
-        return redirect(link('tenant'))
+        return redirect(link('/tenant'))
 
     contacts = obj_contact.get_contacts_by_tenant(session['tenant'])
     list_accounts = []
@@ -71,7 +71,7 @@ def index() :
 
     context = {'resources_path': obj_config.params['resources_path'],
                'title': obj_config.params['app_name'],
-               'link_contact': link('contact'),
+               'link_contact': link('/contact'),
                'lang_name': lang('Name'),
                'lang_email': lang('Email'),
                'lang_phone': lang('Phone'),
@@ -121,7 +121,7 @@ def select_tenant() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
     else :
-        return redirect(link('login'))
+        return redirect(link('/login'))
 
     if request.method == 'POST' :
         if request.form['tenant'] != '' :
@@ -131,14 +131,14 @@ def select_tenant() :
                     if tenant1['contact_tenant'] == request.form['tenant'] :
                         session['contact'] = tenant1
                         session['tenant'] = tenant1['contact_tenant']
-                        return redirect(link(''))
+                        return redirect(link('/'))
 
     # selecting which tenant to view
     list_tenants = obj_contact.get_contacts_by_account()
     if len(list_tenants) == 1 :
         session['contact'] = list_tenants[0]
         session['tenant'] = list_tenants[0]['contact_tenant']
-        return redirect(link(''))
+        return redirect(link('/'))
 
     context = {'resources_path': obj_config.params['resources_path'],
                'title': obj_config.params['app_name'],
@@ -162,17 +162,17 @@ def edit_contact() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
     else :
-        return redirect(link('login'))
+        return redirect(link('/login'))
 
     # selecting which tenant to view
     if 'tenant' not in session or session['tenant'] is None or session['tenant'] == '' :
-        return redirect(link('tenant'))
+        return redirect(link('/tenant'))
 
     if request.method == 'POST' :
 
         obj_account.update_account(session['account']['account_id'], request.form['lang'])
 
-        return redirect(link('contact'))
+        return redirect(link('/contact'))
 
     contacts = obj_contact.get_contacts_by_tenant(session['tenant'])
     list_accounts = []
@@ -185,7 +185,7 @@ def edit_contact() :
 
     context = {'resources_path': obj_config.params['resources_path'],
                'title': obj_config.params['app_name'],
-               'link_home': link(''),
+               'link_home': link('/'),
                'lang_name': lang('Name'),
                'lang_email': lang('Email'),
                'lang_phone': lang('Phone'),
@@ -208,12 +208,12 @@ def setting() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
     else :
-        return redirect(link('login'))
+        return redirect(link('/login'))
 
     if request.method == 'POST' :
         obj_account.update_account(session['account']['account_id'], request.form['lang'])
 
-        return redirect(link('setting'))
+        return redirect(link('/setting'))
 
     context = {'resources_path': obj_config.params['resources_path'],
                'title': obj_config.params['app_name'],
@@ -238,13 +238,13 @@ def login() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
 
-        return redirect(link(''))
+        return redirect(link('/'))
     elif request.method == 'POST' :
         if request.form['email'] != '' and request.form['pass'] != '' and obj_account.check_account(request.form['email'], request.form['pass']) == True :
             session_hash = obj_session.save_session(session['account']['account_id'])
             if session_hash != False :
                 context = {}
-                response = make_response(redirect(link('')))
+                response = make_response(redirect(link('/')))
                 response.set_cookie(key='session_id', value=session_hash)
                 return response
         else :
@@ -273,7 +273,7 @@ def login() :
                'lang_remember_me': lang('Remember this login'),
                'link_google': oidc_google.auth_url(),
                'link_microsoft': oidc_microsoft.auth_url(),
-               'link_forgot': link('forgot')}
+               'link_forgot': link('/forgot')}
 
     return render_template('login.html', context=context)
 
@@ -287,7 +287,7 @@ def callback() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
 
-        return redirect(link(''))
+        return redirect(link('/'))
     elif request.method == 'GET' :
         code = request.args.get('code')
         state = request.args.get('state')
@@ -298,7 +298,7 @@ def callback() :
                     session_hash = obj_session.save_session(session['account']['account_id'])
                     if session_hash != False :
                         context = {}
-                        response = make_response(redirect(link('')))
+                        response = make_response(redirect(link('/')))
                         response.set_cookie(key='session_id', value=session_hash)
                         return response
                 else :
@@ -310,15 +310,15 @@ def callback() :
                     session_hash = obj_session.save_session(session['account']['account_id'])
                     if session_hash != False :
                         context = {}
-                        response = make_response(redirect(link('')))
+                        response = make_response(redirect(link('/')))
                         response.set_cookie(key='session_id', value=session_hash)
                         return response
                 else :
                     session['msg'] = lang('Incorrect Account from Google')
 
-        return redirect(link('login'))
+        return redirect(link('/login'))
     else :
-        return redirect(link('login'))
+        return redirect(link('/login'))
 
 @app.route('/logout')
 def logout() :
@@ -330,9 +330,9 @@ def logout() :
 
         obj_session.logout_session()
 
-        return redirect(link('login'))
+        return redirect(link('/login'))
     else :
-        return redirect(link('login'))
+        return redirect(link('/login'))
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot() :
@@ -342,7 +342,7 @@ def forgot() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
 
-        return redirect(link(''))
+        return redirect(link('/'))
     elif request.method == 'POST' :
         account_info = obj_account.get_account_by_email(request.form['email'])
         if account_info != False :
@@ -358,8 +358,8 @@ def forgot() :
                'lang_email': lang('E-mail'),
                'lang_reset_pass': lang('Reset Password'),
                'lang_login': lang('Return to Login'),
-               'link_login': link('login'),
-               'link_forgot': link('forgot')}
+               'link_login': link('/login'),
+               'link_forgot': link('/forgot')}
 
     return render_template('forgot.html', context=context)
 
@@ -373,14 +373,14 @@ def reset() :
     if obj_session.check_session() == True :
         obj_account.set_account(session['session_id'])
 
-        return redirect(link(''))
+        return redirect(link('/'))
     elif request.method == 'POST' :
         account_info = obj_account.get_account_by_email(request.form['email'])
         if account_info != False :
             if request.form['pass'] == request.form['con_pass'] :
                 obj_account.update_password(account_info['account_id'], request.form['code'], request.form['pass'])
 
-                return redirect(link('login'))
+                return redirect(link('/login'))
     else :
         if request.args.get('email') != None :
             val_email = request.args.get('email')
@@ -397,8 +397,8 @@ def reset() :
                'lang_login': lang('Return to Login'),
                'val_email': val_email,
                'val_code': val_code,
-               'link_login': link('login'),
-               'link_forgot': link('forgot')}
+               'link_login': link('/login'),
+               'link_forgot': link('/forgot')}
 
     return render_template('reset.html', context=context)
 
@@ -502,4 +502,4 @@ def sync() :
         return 'sync finished'
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))

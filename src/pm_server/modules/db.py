@@ -9,10 +9,10 @@ class db :
                        'pass': obj_config.params['mysql_pass'],
                        'port': obj_config.params['mysql_port'],
                        'db'  : obj_config.params['mysql_db']}
+        self.cnx = mysql.connector.connect(user=self.config['user'], port=self.config['port'], password=self.config['pass'], host=self.config['host'], database=self.config['db'])
 
     def select(self, query, data) :
-        cnx = mysql.connector.connect(user=self.config['user'], port=self.config['port'], password=self.config['pass'], host=self.config['host'], database=self.config['db'])
-        cursor = cnx.cursor()
+        cursor = self.cnx.cursor()
 
         cursor.execute(query, data)
         # print(cursor.statement)
@@ -27,39 +27,36 @@ class db :
             list.append(row)
 
         cursor.close()
-        cnx.close()
+        # cnx.close()
 
         return list
 
     def insert(self, query, data) :
-        cnx = mysql.connector.connect(user=self.config['user'], port=self.config['port'], password=self.config['pass'], host=self.config['host'], database=self.config['db'])
-        cursor = cnx.cursor()
+        cursor = self.cnx.cursor()
 
         cursor.execute(query, data)
-        cnx.commit()
+        self.cnx.commit()
         cursor.close()
-        cnx.close()
+        # cnx.close()
 
         return cursor.lastrowid
 
     def update(self, query, data) :
-        cnx = mysql.connector.connect(user=self.config['user'], port=self.config['port'], password=self.config['pass'], host=self.config['host'], database=self.config['db'])
-        cursor = cnx.cursor()
+        cursor = self.cnx.cursor()
 
         cursor.execute(query, data)
-        cnx.commit()
+        self.cnx.commit()
         cursor.close()
-        cnx.close()
+        # cnx.close()
 
         return True
 
     def delete(self, query, data) :
-        cnx = mysql.connector.connect(user=self.config['user'], port=self.config['port'], password=self.config['pass'], host=self.config['host'], database=self.config['db'])
-        cursor = cnx.cursor()
+        cursor = self.cnx.cursor()
 
         cursor.execute(query, data)
-        cnx.commit()
+        self.cnx.commit()
         cursor.close()
-        cnx.close()
+        # cnx.close()
 
         return True
